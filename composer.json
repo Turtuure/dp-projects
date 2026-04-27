@@ -1,0 +1,19 @@
+{
+  "name": "daems/dp-projects",
+  "description": "Projects module for daems-platform",
+  "type": "project",
+  "license": "proprietary",
+  "autoload": {
+    "psr-4": {
+      "DaemsModule\\Projects\\": "backend/src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "DaemsModule\\Projects\\Tests\\": "backend/tests/"
+    }
+  },
+  "require": {
+    "php": "^8.3"
+  }
+}
