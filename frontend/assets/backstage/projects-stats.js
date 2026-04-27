@@ -1,18 +1,19 @@
 /**
- * Projects KPI strip — fetches /api/backstage/projects.php?op=stats and populates
- * KPI values + sparklines on the projects page.
+ * Projects KPI strip — fetches /api/backstage/projects.php?op=stats and refines
+ * the three card-tabs (Projects / Proposals / Comments).
+ *
+ * The Projects card displays the total project count in the value slot, and a
+ * "X drafts • Y featured" subtitle once stats arrive. The Proposals value is
+ * also refreshed against the canonical pending count from the stats endpoint
+ * (server-rendered initial value comes from the proposals list).
+ *
+ * Comments has no stats endpoint contribution today — the server-rendered
+ * value (count of recent comments) is left as-is.
  */
 (function () {
   'use strict';
 
-  if (!document.querySelector('.kpis-grid .kpi-card[data-kpi="active"]')) return;
-
-  var KPI_COLORS = {
-    active:            '#16a34a',
-    drafts:            '#64748b',
-    featured:          '#a855f7',
-    pending_proposals: '#d97706',
-  };
+  if (!document.querySelector('.kpi-card--tab[data-tab="projects"]')) return;
 
   fetch('/api/backstage/projects.php?op=stats')
     .then(function (r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
@@ -21,21 +22,35 @@
 
   function render(data) {
     if (!data) return;
-    document.querySelectorAll('.kpi-card').forEach(function (c) { c.classList.remove('is-loading'); });
+    document.querySelectorAll('.kpi-card--tab').forEach(function (c) { c.classList.remove('is-loading'); });
 
-    Object.keys(KPI_COLORS).forEach(function (id) {
-      setKpi(id, data[id]);
-      initSpark(id, data[id] && data[id].sparkline);
-    });
+    var active   = (data.active            && typeof data.active.value            === 'number') ? data.active.value            : null;
+    var drafts   = (data.drafts            && typeof data.drafts.value            === 'number') ? data.drafts.value            : null;
+    var featured = (data.featured          && typeof data.featured.value          === 'number') ? data.featured.value          : null;
+    var pending  = (data.pending_proposals && typeof data.pending_proposals.value === 'number') ? data.pending_proposals.value : null;
+
+    // Projects card subtitle: "X drafts • Y featured"
+    if (drafts !== null || featured !== null) {
+      var parts = [];
+      if (drafts   !== null) parts.push(drafts   + ' draft'    + (drafts   === 1 ? '' : 's'));
+      if (featured !== null) parts.push(featured + ' featured');
+      var sub = document.querySelector('[data-tab-subtitle="projects"]');
+      if (sub && parts.length) sub.textContent = parts.join(' • ');
+    }
+
+    // Proposals value — refresh from canonical stats count.
+    if (pending !== null) {
+      setVal('proposals', pending);
+    }
+
+    // Active count is informational on the Projects card; we keep the total
+    // project count in the value slot, so this is currently unused. If we
+    // ever switch the Projects value to "active only", flip this.
+    void active;
   }
 
-  function setKpi(id, payload) {
-    var el = document.querySelector('.kpi-card[data-kpi="' + id + '"] .kpi-card__value');
-    if (el && payload) el.textContent = String(payload.value);
-  }
-
-  function initSpark(id, points) {
-    var el = document.getElementById('spark-' + id);
-    if (el && window.Sparkline) window.Sparkline.init(el, points || [], KPI_COLORS[id]);
+  function setVal(tab, value) {
+    var el = document.querySelector('.kpi-card--tab[data-tab="' + tab + '"] .kpi-card__value');
+    if (el) el.textContent = String(value);
   }
 })();
