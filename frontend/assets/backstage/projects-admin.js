@@ -40,10 +40,11 @@
     }
 
     // =========================================================================
-    // Tab switching
+    // Tab switching — clickable KPI cards (.kpi-card--tab[data-tab]) drive
+    // the .proj-tab-content panels below.
     // =========================================================================
     function initTabs() {
-        var buttons = document.querySelectorAll('.proj-tab[data-tab]');
+        var buttons = document.querySelectorAll('.kpi-card--tab[data-tab]');
         buttons.forEach(function (btn) {
             btn.addEventListener('click', function () {
                 var tab = btn.getAttribute('data-tab');
@@ -61,7 +62,7 @@
     }
 
     function activateTab(tab) {
-        document.querySelectorAll('.proj-tab').forEach(function (btn) {
+        document.querySelectorAll('.kpi-card--tab').forEach(function (btn) {
             var isActive = btn.getAttribute('data-tab') === tab;
             btn.classList.toggle('is-active', isActive);
             btn.setAttribute('aria-selected', isActive ? 'true' : 'false');

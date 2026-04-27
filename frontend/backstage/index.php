@@ -2,9 +2,10 @@
 /**
  * Backstage Projects Admin
  *
- * Three tabs:
- *   - proposals: review pending project proposals, approve/reject.
+ * Three KPI card-tabs (Projects / Proposals / Comments) drive the panels below.
+ * Clicking a card swaps the visible panel — no separate tab nav row.
  *   - projects : list + CRUD + status + featured toggle.
+ *   - proposals: review pending project proposals, approve/reject.
  *   - comments : moderation of recent comments across all projects.
  */
 
@@ -18,9 +19,9 @@ $pageTitle   = 'Projects';
 $activePage  = 'projects';
 $breadcrumbs = [];
 
-$activeTab = $_GET['tab'] ?? 'proposals';
+$activeTab = $_GET['tab'] ?? 'projects';
 if (!in_array($activeTab, ['proposals', 'projects', 'comments'], true)) {
-    $activeTab = 'proposals';
+    $activeTab = 'projects';
 }
 
 /**
@@ -56,7 +57,7 @@ $proposals = $fetchList('/backstage/proposals');
 $projects  = $fetchList('/backstage/projects');
 $comments  = $fetchList('/backstage/comments/recent');
 
-// Pending Project Proposals count for the sub-page card.
+// Pending Project Proposals count — drives the Proposals card-tab value.
 $projectProposalsPending = 0;
 foreach (($proposals['items'] ?? []) as $item) {
     if (is_array($item) && isset($item['status']) && $item['status'] === 'pending') {
@@ -88,54 +89,72 @@ ob_start();
 </div>
 
 <?php
-$icon_check    = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M20 6L9 17l-5-5"/></svg>';
-$icon_pencil   = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 20h9M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4z"/></svg>';
-$icon_star     = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>';
-$icon_inbox    = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M22 12h-6l-2 3h-4l-2-3H2"/><path d="M5.45 5.11L2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></svg>';
+// SVG icons for the card-tabs.
+$icon_folder  = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>';
+$icon_inbox   = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M22 12h-6l-2 3h-4l-2-3H2"/><path d="M5.45 5.11L2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></svg>';
+$icon_chat    = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>';
 
-$kpis = [
-    ['kpi_id' => 'active',            'label' => 'Active',             'value' => '—', 'icon_html' => $icon_check,  'icon_variant' => 'green',  'trend_label' => 'in progress',     'trend_direction' => 'muted'],
-    ['kpi_id' => 'drafts',            'label' => 'Drafts',             'value' => '—', 'icon_html' => $icon_pencil, 'icon_variant' => 'gray',   'trend_label' => 'unpublished',     'trend_direction' => 'muted'],
-    ['kpi_id' => 'featured',          'label' => 'Featured',           'value' => '—', 'icon_html' => $icon_star,   'icon_variant' => 'purple', 'trend_label' => 'curated',         'trend_direction' => 'muted'],
-    ['kpi_id' => 'pending_proposals', 'label' => 'Pending proposals',  'value' => '—', 'icon_html' => $icon_inbox,  'icon_variant' => 'amber',  'trend_label' => 'awaiting review', 'trend_direction' => 'warn'],
+// Server-rendered placeholders. projects-stats.js refines the Projects card
+// subtitle ("X drafts • Y featured") once the stats endpoint responds.
+$projectsTotal    = (int) ($projects['total'] ?? count($projects['items'] ?? []));
+$commentsTotal    = (int) ($comments['total'] ?? count($comments['items'] ?? []));
+
+$cardTabs = [
+    [
+        'tab'         => 'projects',
+        'label'       => 'Projects',
+        'value'       => $projectsTotal,
+        'subtitle'    => 'all statuses',
+        'icon_html'   => $icon_folder,
+        'icon_variant'=> 'blue',
+    ],
+    [
+        'tab'         => 'proposals',
+        'label'       => 'Proposals',
+        'value'       => $projectProposalsPending,
+        'subtitle'    => 'awaiting review',
+        'icon_html'   => $icon_inbox,
+        'icon_variant'=> 'amber',
+    ],
+    [
+        'tab'         => 'comments',
+        'label'       => 'Comments',
+        'value'       => $commentsTotal,
+        'subtitle'    => 'across all projects',
+        'icon_html'   => $icon_chat,
+        'icon_variant'=> 'purple',
+    ],
 ];
 ?>
-<div class="kpis-grid">
-  <?php foreach ($kpis as $kpi): daems_shared_partial('components/cards/kpi-card/kpi-card', $kpi); endforeach; ?>
+<div class="kpis-grid kpis-grid--tabs" role="tablist" aria-label="Projects sections">
+  <?php foreach ($cardTabs as $t): $isActive = $activeTab === $t['tab']; ?>
+    <button type="button"
+            class="kpi-card kpi-card--tab<?= $isActive ? ' is-active' : '' ?>"
+            role="tab"
+            id="proj-tab-<?= $esc($t['tab']) ?>"
+            data-tab="<?= $esc($t['tab']) ?>"
+            data-kpi="<?= $esc($t['tab']) ?>"
+            aria-selected="<?= $isActive ? 'true' : 'false' ?>"
+            aria-controls="proj-panel-<?= $esc($t['tab']) ?>">
+      <div class="kpi-card__head">
+        <div>
+          <div class="kpi-card__label"><?= $esc($t['label']) ?></div>
+          <div class="kpi-card__value"><?= $esc((string) $t['value']) ?></div>
+          <div class="kpi-card__trend kpi-card__trend--muted" data-tab-subtitle="<?= $esc($t['tab']) ?>">
+            <?= $esc($t['subtitle']) ?>
+          </div>
+        </div>
+        <span class="kpi-card__icon kpi-card__icon--<?= $esc($t['icon_variant']) ?>"><?= $t['icon_html'] /* trusted inline SVG */ ?></span>
+      </div>
+    </button>
+  <?php endforeach; ?>
 </div>
 <script src="/modules/projects/assets/backstage/projects-stats.js" defer></script>
 
-<?php
-    $cardTitle        = 'Project Proposals';
-    $cardHref         = '/backstage/project-proposals';
-    $cardPendingCount = $projectProposalsPending;
-    $cardSubtitle     = 'Member-submitted projects awaiting review';
-    include DAEMS_SITE_PUBLIC . '/pages/backstage/partials/sub-page-card.php';
-?>
-
-<!-- Tabs -->
-<div class="proj-tabs" role="tablist">
-    <button type="button" class="proj-tab <?= $activeTab === 'proposals' ? 'is-active' : '' ?>"
-            data-tab="proposals" role="tab" aria-selected="<?= $activeTab === 'proposals' ? 'true' : 'false' ?>">
-        Proposals
-        <?php if (!empty($proposals['items'])): ?>
-            <span class="proj-tab__badge"><?= (int) ($proposals['total'] ?? count($proposals['items'])) ?></span>
-        <?php endif; ?>
-    </button>
-    <button type="button" class="proj-tab <?= $activeTab === 'projects' ? 'is-active' : '' ?>"
-            data-tab="projects" role="tab" aria-selected="<?= $activeTab === 'projects' ? 'true' : 'false' ?>">
-        Projects
-        <span class="proj-tab__badge proj-tab__badge--muted"><?= (int) ($projects['total'] ?? count($projects['items'])) ?></span>
-    </button>
-    <button type="button" class="proj-tab <?= $activeTab === 'comments' ? 'is-active' : '' ?>"
-            data-tab="comments" role="tab" aria-selected="<?= $activeTab === 'comments' ? 'true' : 'false' ?>">
-        Comments
-        <span class="proj-tab__badge proj-tab__badge--muted"><?= (int) ($comments['total'] ?? count($comments['items'])) ?></span>
-    </button>
-</div>
-
-<!-- Proposals tab -->
-<section class="proj-tab-content <?= $activeTab === 'proposals' ? 'is-active' : '' ?>" data-tab-content="proposals">
+<!-- Proposals panel -->
+<section class="proj-tab-content <?= $activeTab === 'proposals' ? 'is-active' : '' ?>"
+         data-tab-content="proposals" id="proj-panel-proposals"
+         role="tabpanel" aria-labelledby="proj-tab-proposals">
     <?php if (empty($proposals['items'])): ?>
         <div class="card"><div class="card__body proj-empty">No pending project proposals.</div></div>
     <?php else: ?>
@@ -179,8 +198,10 @@ $kpis = [
     <?php endif; ?>
 </section>
 
-<!-- Projects tab -->
-<section class="proj-tab-content <?= $activeTab === 'projects' ? 'is-active' : '' ?>" data-tab-content="projects">
+<!-- Projects panel -->
+<section class="proj-tab-content <?= $activeTab === 'projects' ? 'is-active' : '' ?>"
+         data-tab-content="projects" id="proj-panel-projects"
+         role="tabpanel" aria-labelledby="proj-tab-projects">
     <div class="card proj-filters-card">
         <div class="card__body">
             <div class="proj-filters-row">
@@ -235,8 +256,10 @@ $kpis = [
     </div>
 </section>
 
-<!-- Comments tab -->
-<section class="proj-tab-content <?= $activeTab === 'comments' ? 'is-active' : '' ?>" data-tab-content="comments">
+<!-- Comments panel -->
+<section class="proj-tab-content <?= $activeTab === 'comments' ? 'is-active' : '' ?>"
+         data-tab-content="comments" id="proj-panel-comments"
+         role="tabpanel" aria-labelledby="proj-tab-comments">
     <div class="card proj-filters-card">
         <div class="card__body">
             <div class="proj-filters-row">
@@ -277,7 +300,6 @@ $kpis = [
      events-module modal tokens for visual consistency. -->
 <link rel="stylesheet" href="/pages/backstage/events/event-modal.css">
 <link rel="stylesheet" href="/modules/projects/assets/backstage/projects-admin.css">
-<link rel="stylesheet" href="/pages/backstage/shared/sub-page-card.css">
 <script>
 window.DAEMS_PROJECTS_TAB = <?= json_encode([
     'proposals' => $proposals,
