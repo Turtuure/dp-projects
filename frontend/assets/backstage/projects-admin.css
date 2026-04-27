@@ -108,6 +108,15 @@
     padding: 6px 10px;
     font-size: 0.88rem;
     resize: vertical;
+    background: var(--surface-medium);
+    color: var(--text-primary);
+    font-family: inherit;
+    transition: border-color 0.15s, box-shadow 0.15s;
+}
+.proj-proposal-actions .proj-note:focus {
+    outline: none;
+    border-color: var(--brand-primary);
+    box-shadow: 0 0 0 3px var(--brand-primary-subtle);
 }
 
 @media (max-width: 640px) {
@@ -120,6 +129,27 @@
 .proj-field        { display: flex; flex-direction: column; gap: 4px; }
 .proj-field--search { flex: 1 1 200px; }
 .proj-label        { font-size: 0.8rem; font-weight: 600; color: var(--text-secondary); }
+
+/* Bare <select>/<input> inside the filter row — token-driven so dark mode
+   reads naturally. Without these, native browser styles bleed through and
+   render white-on-dark. */
+.proj-filters-row select,
+.proj-filters-row input[type="text"] {
+    border: 1px solid var(--surface-border);
+    border-radius: var(--radius-md, 8px);
+    background: var(--surface-medium);
+    color: var(--text-primary);
+    padding: 8px 12px;
+    font: inherit;
+    font-size: 0.9rem;
+    transition: border-color 0.15s, box-shadow 0.15s;
+}
+.proj-filters-row select:focus,
+.proj-filters-row input[type="text"]:focus {
+    outline: none;
+    border-color: var(--brand-primary);
+    box-shadow: 0 0 0 3px var(--brand-primary-subtle);
+}
 
 .proj-meta-row { font-size: 0.85rem; color: var(--text-secondary); margin-bottom: var(--space-2, 0.5rem); }
 .proj-empty    { text-align: center; padding: var(--space-6, 2.5rem) 0; color: var(--text-secondary); }
@@ -156,7 +186,14 @@
     border: 1px solid var(--surface-border);
     border-radius: 4px;
     background: var(--surface-dark);
+    color: var(--text-primary);
     text-transform: capitalize;
+    transition: border-color 0.15s, box-shadow 0.15s;
+}
+.proj-status-select:focus {
+    outline: none;
+    border-color: var(--brand-primary);
+    box-shadow: 0 0 0 3px var(--brand-primary-subtle);
 }
 
 /* ---- Status pills (used if needed as text) ---- */
@@ -204,6 +241,14 @@
     border: 1px solid var(--surface-border);
     border-radius: 4px;
     background: var(--surface-dark);
+    color: var(--text-primary);
+    font-family: inherit;
+    transition: border-color 0.15s, box-shadow 0.15s;
+}
+.proj-reason:focus {
+    outline: none;
+    border-color: var(--brand-primary);
+    box-shadow: 0 0 0 3px var(--brand-primary-subtle);
 }
 
 /* ---- Small helpers (duplicates are ok; CSS cascade handles) ---- */
