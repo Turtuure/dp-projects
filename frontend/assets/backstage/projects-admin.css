@@ -1,0 +1,241 @@
+/* ============================================================
+   Projects admin list — tabs, tables, featured star.
+   Confirmation dialogs reuse .evt-modal* tokens from event-modal.css.
+   Create/edit form lives on its own sub-pages — see project-form.css.
+   ============================================================ */
+
+.projects-admin { display: flex; flex-direction: column; gap: var(--space-4, 1.5rem); }
+
+/* ---- Tabs ---- */
+.proj-tabs {
+    display: flex;
+    gap: 2px;
+    border-bottom: 1px solid var(--surface-border);
+    margin-bottom: var(--space-3, 1rem);
+    flex-wrap: wrap;
+}
+.proj-tab {
+    background: none;
+    border: none;
+    padding: 10px 18px;
+    font-size: 0.92rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: color 0.15s, border-color 0.15s;
+}
+.proj-tab:hover     { color: var(--brand-primary); }
+.proj-tab.is-active { color: var(--brand-primary); border-bottom-color: var(--brand-primary); }
+
+.proj-tab__badge {
+    display: inline-block;
+    min-width: 20px;
+    padding: 2px 8px;
+    border-radius: 999px;
+    background: var(--brand-primary);
+    color: #fff;
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-align: center;
+}
+.proj-tab__badge--muted { background: var(--surface-light); color: var(--text-secondary); }
+
+.proj-tab-content { display: none; }
+.proj-tab-content.is-active { display: block; }
+
+/* ---- Proposal cards ---- */
+.proj-proposal-card { margin-bottom: var(--space-3, 1rem); border: 1px solid var(--surface-border); }
+
+.proj-proposal-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: var(--space-3, 1rem);
+    margin-bottom: var(--space-2, 0.5rem);
+}
+.proj-proposal-title {
+    margin: 0 0 4px;
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+.proj-proposal-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2, 0.5rem);
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    align-items: center;
+}
+.proj-proposal-date {
+    font-size: 0.82rem;
+    color: var(--text-secondary);
+    white-space: nowrap;
+}
+.proj-category-pill {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 999px;
+    background: var(--brand-primary-muted);
+    color: var(--brand-primary);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+}
+.proj-proposal-summary {
+    margin: 0 0 var(--space-2, 0.5rem);
+    color: var(--text-primary);
+}
+.proj-proposal-details {
+    margin-bottom: var(--space-3, 1rem);
+    font-size: 0.9rem;
+}
+.proj-proposal-details summary {
+    cursor: pointer;
+    font-size: 0.85rem;
+    color: var(--brand-primary);
+    font-weight: 600;
+}
+.proj-proposal-details p {
+    margin-top: 8px;
+    color: var(--text-primary);
+    white-space: pre-wrap;
+}
+.proj-proposal-actions {
+    display: grid;
+    grid-template-columns: 1fr auto auto;
+    gap: var(--space-2, 0.5rem);
+    align-items: center;
+}
+.proj-proposal-actions .proj-note {
+    width: 100%;
+    border: 1px solid var(--surface-border);
+    border-radius: 6px;
+    padding: 6px 10px;
+    font-size: 0.88rem;
+    resize: vertical;
+}
+
+@media (max-width: 640px) {
+    .proj-proposal-actions { grid-template-columns: 1fr; }
+}
+
+/* ---- Projects table ---- */
+.proj-filters-card { margin-bottom: 0; }
+.proj-filters-row  { display: flex; flex-wrap: wrap; gap: var(--space-3, 1rem); align-items: flex-end; }
+.proj-field        { display: flex; flex-direction: column; gap: 4px; }
+.proj-field--search { flex: 1 1 200px; }
+.proj-label        { font-size: 0.8rem; font-weight: 600; color: var(--text-secondary); }
+
+.proj-meta-row { font-size: 0.85rem; color: var(--text-secondary); margin-bottom: var(--space-2, 0.5rem); }
+.proj-empty    { text-align: center; padding: var(--space-6, 2.5rem) 0; color: var(--text-secondary); }
+
+/* Project name in row — clickable link to the edit sub-page. */
+.proj-row-link {
+    color: var(--text-primary);
+    text-decoration: none;
+    transition: color 0.15s;
+}
+.proj-row-link:hover     { color: var(--brand-primary); }
+.proj-row-link strong    { font-weight: 700; }
+
+.proj-table .proj-actions,
+.proj-comments-table .proj-actions { white-space: nowrap; display: flex; gap: 6px; align-items: center; }
+
+.proj-action {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 4px;
+    color: var(--text-secondary);
+    transition: color 0.15s, background 0.15s;
+}
+.proj-action svg { width: 18px; height: 18px; display: block; }
+.proj-action:hover        { background: var(--surface-light); color: var(--brand-primary); }
+.proj-action--danger      { color: var(--status-error); }
+.proj-action--danger:hover { background: var(--status-error-subtle); }
+
+.proj-status-select {
+    padding: 4px 8px;
+    font-size: 0.82rem;
+    border: 1px solid var(--surface-border);
+    border-radius: 4px;
+    background: var(--surface-dark);
+    text-transform: capitalize;
+}
+
+/* ---- Status pills (used if needed as text) ---- */
+.proj-pill {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 999px;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+}
+.proj-pill--draft    { background: var(--surface-light);         color: var(--text-secondary); }
+.proj-pill--active   { background: var(--status-success-subtle); color: var(--status-success); }
+.proj-pill--archived { background: var(--status-warning-subtle); color: var(--status-warning); }
+
+/* ---- Featured star toggle ---- */
+.featured-star {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.2rem;
+    line-height: 1;
+    color: var(--status-warning);
+    padding: 2px 6px;
+    border-radius: 4px;
+    transition: color 0.15s, background 0.15s;
+}
+.featured-star:hover { background: var(--status-warning-subtle); }
+.featured-star--off  { color: var(--text-muted); }
+.featured-star--off:hover { color: var(--status-warning); }
+.proj-featured-cell { text-align: center; }
+
+/* ---- Comments table ---- */
+.proj-comment-content {
+    max-width: 360px;
+    white-space: normal;
+    word-break: break-word;
+    color: var(--text-primary);
+}
+.proj-reason {
+    width: 140px;
+    padding: 4px 8px;
+    font-size: 0.82rem;
+    border: 1px solid var(--surface-border);
+    border-radius: 4px;
+    background: var(--surface-dark);
+}
+
+/* ---- Small helpers (duplicates are ok; CSS cascade handles) ---- */
+.btn--sm { padding: 4px 12px; font-size: 0.82rem; }
+
+/* ---- Button variants (scoped fallback — base .btn comes from Bootstrap) ---- */
+.btn--primary {
+    background: var(--brand-primary);
+    border-color: var(--brand-primary);
+    color: #fff;
+}
+.btn--primary:hover { background: var(--brand-primary-dim); border-color: var(--brand-primary-dim); color: #fff; }
+.btn--ghost {
+    background: transparent;
+    border: 1px solid var(--surface-border);
+    color: var(--text-primary);
+}
+.btn--ghost:hover { background: var(--surface-light); }
+.btn--danger {
+    background: var(--status-error);
+    border-color: var(--status-error);
+    color: #fff;
+}
+.btn--danger:hover { background: var(--status-error-hover); border-color: var(--status-error-hover); color: #fff; }

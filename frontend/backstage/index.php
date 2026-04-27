@@ -83,7 +83,7 @@ ob_start();
         <p class="page-header__subtitle">Moderate proposals, manage projects, and keep comments clean.</p>
     </div>
     <div>
-        <button type="button" class="btn btn--primary" id="btn-new-project">+ New project</button>
+        <a href="/backstage/projects/new" class="btn btn--primary" id="btn-new-project">+ New project</a>
     </div>
 </div>
 
@@ -271,16 +271,13 @@ $kpis = [
     </div>
 </section>
 
-<!-- Create/Edit modal mount -->
-<div id="project-modal-mount"></div>
-
 </div><!-- /.projects-admin -->
 
-<!-- Reuse event-modal.css for .evt-modal* and .evt-form* tokens -->
+<!-- Confirmation dialogs (proposal approve/reject, comment delete, status change) reuse the
+     events-module modal tokens for visual consistency. -->
 <link rel="stylesheet" href="/pages/backstage/events/event-modal.css">
-<link rel="stylesheet" href="/modules/projects/assets/backstage/project-modal.css">
+<link rel="stylesheet" href="/modules/projects/assets/backstage/projects-admin.css">
 <link rel="stylesheet" href="/pages/backstage/shared/sub-page-card.css">
-<link rel="stylesheet" href="/pages/backstage/shared/locale-cards.css">
 <script>
 window.DAEMS_PROJECTS_TAB = <?= json_encode([
     'proposals' => $proposals,
@@ -289,8 +286,7 @@ window.DAEMS_PROJECTS_TAB = <?= json_encode([
     'activeTab' => $activeTab,
 ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) ?>;
 </script>
-<script src="/pages/backstage/shared/locale-cards.js"></script>
-<script src="/modules/projects/assets/backstage/project-modal.js"></script>
+<script src="/modules/projects/assets/backstage/projects-admin.js"></script>
 
 <?php
 $pageContent = ob_get_clean();
