@@ -1,0 +1,20 @@
+<?php
+
+declare(strict_types=1);
+
+namespace DaemsModule\Projects\Application\Project\CreateProject;
+
+use Daems\Domain\Auth\ActingUser;
+
+final class CreateProjectInput
+{
+    public function __construct(
+        public readonly ActingUser $acting,
+        public readonly string $title,
+        public readonly string $category,
+        public readonly string $icon,
+        public readonly string $summary,
+        public readonly string $description,
+        public readonly string $status,
+    ) {}
+}
