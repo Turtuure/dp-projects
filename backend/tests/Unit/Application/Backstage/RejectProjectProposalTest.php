@@ -17,7 +17,7 @@ use Daems\Domain\Tenant\TenantId;
 use Daems\Domain\Tenant\UserTenantRole;
 use Daems\Domain\User\UserId;
 use Daems\Tests\Support\Fake\ImmediateTransactionManager;
-use Daems\Tests\Support\Fake\InMemoryAdminApplicationDismissalRepository;
+use DaemsModule\Members\Tests\Support\InMemoryAdminApplicationDismissalRepository;
 use DaemsModule\Projects\Tests\Support\InMemoryProjectProposalRepository;
 use DaemsModule\Projects\Tests\Support\InMemoryProjectRepository;
 use Daems\Tests\Support\FrozenClock;

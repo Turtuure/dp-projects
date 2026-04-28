@@ -20,7 +20,7 @@ use Daems\Domain\Tenant\TenantId;
 use Daems\Domain\Tenant\UserTenantRole;
 use Daems\Domain\User\UserId;
 use Daems\Infrastructure\Adapter\Persistence\Sql\PdoTransactionManager;
-use Daems\Infrastructure\Adapter\Persistence\Sql\SqlAdminApplicationDismissalRepository;
+use DaemsModule\Members\Infrastructure\SqlAdminApplicationDismissalRepository;
 use DaemsModule\Projects\Infrastructure\SqlProjectProposalRepository;
 use DaemsModule\Projects\Infrastructure\SqlProjectRepository;
 use Daems\Infrastructure\Framework\Database\Connection;

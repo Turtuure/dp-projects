@@ -22,7 +22,7 @@ use Daems\Domain\Shared\NotFoundException;
 use Daems\Domain\Shared\ValueObject\Uuid7;
 use Daems\Domain\Tenant\UserTenantRole;
 use Daems\Infrastructure\Adapter\Persistence\Sql\PdoTransactionManager;
-use Daems\Infrastructure\Adapter\Persistence\Sql\SqlAdminApplicationDismissalRepository;
+use DaemsModule\Members\Infrastructure\SqlAdminApplicationDismissalRepository;
 use DaemsModule\Projects\Infrastructure\SqlProjectCommentModerationAuditRepository;
 use DaemsModule\Projects\Infrastructure\SqlProjectProposalRepository;
 use DaemsModule\Projects\Infrastructure\SqlProjectRepository;
