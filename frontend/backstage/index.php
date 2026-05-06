@@ -296,7 +296,7 @@ $cardTabs = [
 
 <!-- Confirmation dialogs (proposal approve/reject, comment delete, status change) reuse the
      events-module modal tokens for visual consistency. -->
-<link rel="stylesheet" href="/pages/backstage/events/event-modal.css">
+<link rel="stylesheet" href="/backstage/pages/events/event-modal.css">
 <link rel="stylesheet" href="/modules/projects/assets/backstage/projects-admin.css">
 <script>
 window.DAEMS_PROJECTS_TAB = <?= json_encode([
