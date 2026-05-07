@@ -240,7 +240,7 @@
                 '<td><a class="proj-row-link" href="' + editHref + '"><strong>' + escHtml(p.title || '') + '</strong></a></td>' +
                 '<td>' + escHtml(catLabel) + '</td>' +
                 '<td>' +
-                    '<select class="proj-status-select" data-status-id="' + escHtml(id) + '" data-current="' + escHtml(status) + '">' +
+                    '<select class="proj-status-select" name="status" aria-label="Status of ' + escHtml(p.title || 'project') + '" data-status-id="' + escHtml(id) + '" data-current="' + escHtml(status) + '">' +
                         ['draft', 'active', 'archived'].map(function (s) {
                             return '<option value="' + s + '"' + (s === status ? ' selected' : '') + '>' + s + '</option>';
                         }).join('') +

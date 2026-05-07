@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 use Daems\Frontend\ApiClient;
 
-$pageTitle   = 'Projects';
+$pageTitle   = 'backstage.title.projects';
 $activePage  = 'projects';
 $breadcrumbs = [];
 
@@ -296,7 +296,7 @@ $cardTabs = [
 
 <!-- Confirmation dialogs (proposal approve/reject, comment delete, status change) reuse the
      events-module modal tokens for visual consistency. -->
-<link rel="stylesheet" href="/backstage/pages/events/event-modal.css">
+<link rel="stylesheet" href="/modules/events/assets/backstage/event-modal.css">
 <link rel="stylesheet" href="/modules/projects/assets/backstage/projects-admin.css">
 <script>
 window.DAEMS_PROJECTS_TAB = <?= json_encode([
