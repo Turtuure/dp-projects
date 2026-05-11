@@ -227,7 +227,9 @@ return static function (Container $container): void {
     // Dashboard widgets — registered with the platform's WidgetRegistry singleton
     // (already bound by daems-platform/bootstrap/app.php before module bindings run).
     $registry = $container->make(\Daems\Domain\Dashboard\WidgetRegistry::class);
-    $registry->register(new \DaemsModule\Projects\Frontend\Backstage\Widgets\ProjectsKpiWidget());
+    $registry->register(new \DaemsModule\Projects\Frontend\Backstage\Widgets\ProjectsKpiWidget(
+        $container->make(\Daems\Application\Admin\GetAdminStats\GetAdminStats::class),
+    ));
 
     // ---------------------------------------------------------------------
     // 2× Controllers
